@@ -17,5 +17,5 @@ FROM sierra_view.patron_view v
 JOIN sierra_view.patron_record_phone r ON v.id = r.patron_record_id 
 JOIN sierra_view.patron_record_phone_type ty ON r.patron_record_phone_type_id = ty.id
 
-WHERE notification_medium_code = 'm' AND code = 't' AND expiration_date_gmt > current_date
+WHERE notification_medium_code = 't' AND code = 'p' AND expiration_date_gmt > current_date
 ORDER BY barcode;
