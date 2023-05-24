@@ -1,6 +1,6 @@
-WBVardef today=@"select to_char(current_date,'mmddyyyy')";
-WBExport -type=text
-                 -file='c:/shoutbomb/FTP/text_patrons/text_patrons$[today].txt'
+WbVarDef today=@"select to_char(current_date,'mmddyyyy')";
+WbExport -type=text
+                 -file='C:\portableApps\FTP\text_patrons\text_patrons$[today].txt'
                  -delimiter='|'
                  -quotechar='"'
                  -quoteCharEscaping=escape
@@ -8,17 +8,14 @@ WBExport -type=text
                  -encoding=utf8;
 
 SELECT
-	vv1.field_content AS phone_number,
-	pv.barcode AS barcode,
-	pv.iii_language_pref_code as language
-FROM sierra_view.patron_view AS pv
-	JOIN sierra_view.varfield_view AS vv1 
-		ON (pv.record_num = vv1.record_num)
-	JOIN sierra_view.varfield_view AS vv2 
-		ON (pv.record_num = vv2.record_num)
-WHERE vv1.record_type_code = 'p'
-	AND vv1.varfield_type_code = 'o'
-	AND vv2.varfield_type_code = 'e'
-	AND (vv2.field_content LIKE 't' OR vv2.field_content LIKE 'T')
-	AND pv.barcode is not null
+       phone_number, 
+       barcode,  
+       iii_language_pref_code
+
+FROM sierra_view.patron_view v
+
+JOIN sierra_view.patron_record_phone r ON v.id = r.patron_record_id 
+JOIN sierra_view.patron_record_phone_type ty ON r.patron_record_phone_type_id = ty.id
+
+WHERE notification_medium_code = 'm' AND code = 't' AND expiration_date_gmt > current_date
 ORDER BY barcode;
